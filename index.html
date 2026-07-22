@@ -3,11 +3,66 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>fandom-fakeout</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#020617" />
+    <meta name="color-scheme" content="dark" />
+    <title>Fandom Fakeout</title>
+    <style>
+      html, body, #root {
+        min-height: 100%;
+        background: #020617;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        min-height: 100dvh;
+      }
+
+      .boot-screen {
+        box-sizing: border-box;
+        min-height: 100vh;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        color: #ddd6fe;
+        background:
+          radial-gradient(circle at 50% 20%, rgba(124, 58, 237, 0.18), transparent 40%),
+          #020617;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        text-align: center;
+      }
+
+      .boot-screen__title {
+        margin: 0;
+        font-family: Copperplate, "Copperplate Gothic Bold", "Arial Black", sans-serif;
+        font-size: clamp(1.7rem, 8vw, 2.8rem);
+        letter-spacing: 0.04em;
+      }
+
+      .boot-screen__dots {
+        margin-top: 18px;
+        color: #8b5cf6;
+        letter-spacing: 0.4em;
+        animation: boot-pulse 1.1s ease-in-out infinite alternate;
+      }
+
+      @keyframes boot-pulse {
+        from { opacity: 0.35; }
+        to { opacity: 1; }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="boot-screen" aria-label="Loading Fandom Fakeout">
+        <div>
+          <p class="boot-screen__title">FANDOM FAKEOUT</p>
+          <div class="boot-screen__dots" aria-hidden="true">● ● ●</div>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

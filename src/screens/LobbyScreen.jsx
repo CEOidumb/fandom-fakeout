@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import AiLoadingOverlay from '../components/AiLoadingOverlay'
 import GameSettingsModal from '../components/GameSettingsModal'
 import HowToPlayModal from '../components/HowToPlayModal'
 import SyncBadge from '../components/SyncBadge'
@@ -117,11 +118,11 @@ export default function LobbyScreen({
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center overflow-hidden bg-slate-950 px-4 py-10 text-slate-200 sm:px-6 sm:py-14">
+    <div className="app-shell relative flex min-h-screen min-h-dvh flex-col items-center overflow-hidden px-4 py-8 text-slate-200 sm:px-6 sm:py-14">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-40 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-violet-600/25 blur-[120px]" />
-        <div className="absolute top-32 -right-24 h-72 w-72 rounded-full bg-indigo-600/20 blur-[120px]" />
-        <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-purple-700/15 blur-[120px]" />
+        <div className="absolute -top-40 left-1/2 hidden h-80 w-80 -translate-x-1/2 rounded-full bg-violet-600/25 blur-[120px] sm:block" />
+        <div className="absolute top-32 -right-24 hidden h-72 w-72 rounded-full bg-indigo-600/20 blur-[120px] sm:block" />
+        <div className="absolute -bottom-24 -left-24 hidden h-72 w-72 rounded-full bg-purple-700/15 blur-[120px] sm:block" />
       </div>
 
       <header className="mb-8 w-full max-w-md text-center sm:mb-10">
@@ -147,7 +148,7 @@ export default function LobbyScreen({
         {['CHOOSE', 'LOCAL', 'ONLINE'].includes(lobbyMode) && (
           <div className="space-y-5">
             {lobbyMode === 'CHOOSE' && (
-              <div className="rounded-3xl border border-white/10 bg-slate-900/60 p-6 shadow-2xl shadow-violet-950/50 backdrop-blur-xl sm:p-7">
+              <div className="rounded-3xl border border-white/10 bg-slate-900/90 p-6 shadow-lg shadow-violet-950/30 sm:bg-slate-900/60 sm:p-7 sm:shadow-2xl sm:shadow-violet-950/50 sm:backdrop-blur-xl">
                 <div className="mb-6 text-center">
                   <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-violet-300">
                     Choose Mode
@@ -227,7 +228,7 @@ export default function LobbyScreen({
             )}
 
             {lobbyMode === 'LOCAL' && (
-              <div className="rounded-3xl border border-white/10 bg-slate-900/60 p-6 shadow-2xl shadow-violet-950/50 backdrop-blur-xl sm:p-7">
+              <div className="rounded-3xl border border-white/10 bg-slate-900/90 p-6 shadow-lg shadow-violet-950/30 sm:bg-slate-900/60 sm:p-7 sm:shadow-2xl sm:shadow-violet-950/50 sm:backdrop-blur-xl">
                 <div className="mb-5 flex items-center gap-3">
                   <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-500/15 text-xl">
                     📱
@@ -289,7 +290,7 @@ export default function LobbyScreen({
             )}
 
             {lobbyMode === 'ONLINE' && (
-              <div className="rounded-3xl border border-white/10 bg-slate-900/60 p-6 shadow-2xl shadow-violet-950/50 backdrop-blur-xl sm:p-7">
+              <div className="rounded-3xl border border-white/10 bg-slate-900/90 p-6 shadow-lg shadow-violet-950/30 sm:bg-slate-900/60 sm:p-7 sm:shadow-2xl sm:shadow-violet-950/50 sm:backdrop-blur-xl">
                 <div className="mb-5 flex items-center gap-3">
                   <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-500/15 text-xl">
                     🌐
@@ -347,7 +348,7 @@ export default function LobbyScreen({
         )}
 
         {lobbyMode === 'HOST' && (
-          <div className="rounded-3xl border border-white/10 bg-slate-900/60 p-6 shadow-2xl shadow-violet-950/50 backdrop-blur-xl sm:p-7">
+          <div className="rounded-3xl border border-white/10 bg-slate-900/90 p-6 shadow-lg shadow-violet-950/30 sm:bg-slate-900/60 sm:p-7 sm:shadow-2xl sm:shadow-violet-950/50 sm:backdrop-blur-xl">
             <div className="mb-6 text-center">
               <span className="inline-flex rounded-full border border-violet-400/30 bg-violet-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.25em] text-violet-200">
                 Hosting
@@ -431,7 +432,7 @@ export default function LobbyScreen({
         )}
 
         {lobbyMode === 'JOIN' && (
-          <div className="rounded-3xl border border-white/10 bg-slate-900/60 p-6 text-center shadow-2xl shadow-violet-950/50 backdrop-blur-xl sm:p-7">
+          <div className="rounded-3xl border border-white/10 bg-slate-900/90 p-6 text-center shadow-lg shadow-violet-950/30 sm:bg-slate-900/60 sm:p-7 sm:shadow-2xl sm:shadow-violet-950/50 sm:backdrop-blur-xl">
             <span className="inline-flex rounded-full border border-violet-400/30 bg-violet-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.25em] text-violet-200">
               Guest
             </span>
@@ -506,6 +507,10 @@ export default function LobbyScreen({
       <HowToPlayModal
         isOpen={isHowToPlayOpen}
         onClose={() => setIsHowToPlayOpen(false)}
+      />
+      <AiLoadingOverlay
+        isOpen={isGeneratingWordPair && selectedWordSource === 'ai'}
+        selectionSummary={gameSelectionSummary}
       />
     </div>
   )
