@@ -53,9 +53,21 @@ export default function HowToPlayModal({ isOpen, onClose }) {
             type="button"
             aria-label="Close how to play"
             onClick={onClose}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-xl text-slate-400 transition hover:border-violet-400/40 hover:text-white"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 bg-white/[0.03] text-slate-400 transition hover:border-violet-400/40 hover:text-white"
           >
-            &times;
+            <svg
+              aria-hidden="true"
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M6 6l12 12M18 6 6 18"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeWidth="2"
+              />
+            </svg>
           </button>
         </div>
 
