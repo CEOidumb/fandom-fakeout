@@ -5,16 +5,19 @@ import {
   DEFAULT_CATEGORY_DISPLAY_MODE,
   DEFAULT_AI_DIFFICULTY,
   DEFAULT_HINT_MODE,
+  DEFAULT_LOCAL_GAME_MODE,
   DEFAULT_TOPIC_SELECTION_MODE,
   DEFAULT_TIMER_MODE,
   DEFAULT_WORD_SOURCE,
   HINT_MODES,
+  LOCAL_GAME_MODES,
   STAGE_TIMERS,
   TIMER_MODES,
   TOPIC_SELECTION_MODES,
   WORD_SOURCES,
 } from './config/gameOptions'
 import {
+  CATEGORY_CATALOG,
   DEFAULT_CATEGORY_ID,
   DEFAULT_SUBCATEGORY_ID,
   getCategory,
@@ -28,10 +31,16 @@ import DiscussionScreen from './screens/DiscussionScreen'
 import LobbyScreen from './screens/LobbyScreen'
 import ResultsScreen from './screens/ResultsScreen'
 import RevealScreen from './screens/RevealScreen'
+import TimeTrialScreen from './screens/TimeTrialScreen'
 import VotingScreen from './screens/VotingScreen'
 import { generateAiWordPair } from './services/wordGeneration'
 import { supabase } from './supabaseClient'
 import { assignPlayerRoles, extractPlayerNames } from './utils/gameLogic'
+import {
+  formatTimeTicks,
+  generateTimeTargetTicks,
+  getTimeTargetHint,
+} from './utils/timeTarget'
 
 export default function App() {
   // Shared round state
@@ -49,6 +58,9 @@ export default function App() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(DEFAULT_CATEGORY_ID)
   const [selectedSubcategoryId, setSelectedSubcategoryId] = useState(DEFAULT_SUBCATEGORY_ID)
   const [topicSelectionMode, setTopicSelectionMode] = useState(DEFAULT_TOPIC_SELECTION_MODE)
+  const [selectedRandomCategoryIds, setSelectedRandomCategoryIds] = useState(
+    () => CATEGORY_CATALOG.map((category) => category.id)
+  )
   const [customCategory, setCustomCategory] = useState('')
   const [customTopic, setCustomTopic] = useState('')
   const [selectedWordSource, setSelectedWordSource] = useState(DEFAULT_WORD_SOURCE)
@@ -63,8 +75,11 @@ export default function App() {
   // Pass & Play state
   const [localPlayers, setLocalPlayers] = useState([])
   const [localNameInput, setLocalNameInput] = useState('')
+  const [selectedLocalGameMode, setSelectedLocalGameMode] = useState(DEFAULT_LOCAL_GAME_MODE)
   const [revealIndex, setRevealIndex] = useState(0)
   const [isLocalImposterRevealed, setIsLocalImposterRevealed] = useState(false)
+  const [timeTargetTicks, setTimeTargetTicks] = useState(null)
+  const [timeTrialAttempts, setTimeTrialAttempts] = useState([])
 
   // Online room state
   const [lobbyMode, setLobbyMode] = useState('CHOOSE')
@@ -151,6 +166,7 @@ export default function App() {
     setSelectedCategoryId,
     setSelectedSubcategoryId,
     setTopicSelectionMode,
+    setSelectedRandomCategoryIds,
     setCustomCategory,
     setCustomTopic,
     setSelectedWordSource,
@@ -176,7 +192,9 @@ export default function App() {
 
   const resolveRoundSelection = () => {
     if (topicSelectionMode === 'random') {
-      const { category, subcategory } = getRandomCategorySelection()
+      const { category, subcategory } = getRandomCategorySelection(
+        selectedRandomCategoryIds
+      )
       return {
         categoryId: category.id,
         subcategoryId: subcategory.id,
@@ -268,6 +286,33 @@ export default function App() {
   const handleStartLocalGame = async () => {
     if (localPlayers.length < 3 || isGeneratingWordPair) return
 
+    if (selectedLocalGameMode === 'time-target') {
+      const targetTicks = generateTimeTargetTicks()
+      const roles = assignPlayerRoles(
+        localPlayers,
+        {
+          regular: formatTimeTicks(targetTicks),
+          undercover: getTimeTargetHint(targetTicks),
+        },
+        {
+          showHint: true,
+          category: 'Time Target',
+        }
+      )
+
+      setIsLocalMode(true)
+      setPlayerRoles(roles)
+      setRevealIndex(0)
+      setVotes({})
+      setHasVoted(false)
+      setIsLocalImposterRevealed(false)
+      setTimeTargetTicks(targetTicks)
+      setTimeTrialAttempts([])
+      setPhaseEndsAt(null)
+      setStage('REVEAL')
+      return
+    }
+
     setIsGeneratingWordPair(true)
 
     try {
@@ -285,6 +330,8 @@ export default function App() {
       setVotes({})
       setHasVoted(false)
       setIsLocalImposterRevealed(false)
+      setTimeTargetTicks(null)
+      setTimeTrialAttempts([])
       setTimer(STAGE_TIMERS.DISCUSSION)
       setPhaseEndsAt(null)
       setStage('REVEAL')
@@ -318,6 +365,9 @@ export default function App() {
       selected_category: selectedCategoryId,
       selected_subcategory: selectedSubcategoryId,
       selection_mode: topicSelectionMode,
+      ...(topicSelectionMode === 'random'
+        ? { random_categories: selectedRandomCategoryIds }
+        : {}),
       custom_category: customCategory.trim(),
       custom_topic: customTopic.trim(),
       word_source: selectedWordSource,
@@ -391,6 +441,16 @@ export default function App() {
     if (TOPIC_SELECTION_MODES.some((option) => option.id === room.selection_mode)) {
       setTopicSelectionMode(room.selection_mode)
     }
+    if (Array.isArray(room.random_categories)) {
+      const validCategoryIds = room.random_categories.filter((categoryId) => (
+        CATEGORY_CATALOG.some((category) => category.id === categoryId)
+      ))
+      setSelectedRandomCategoryIds(
+        validCategoryIds.length > 0
+          ? validCategoryIds
+          : CATEGORY_CATALOG.map((category) => category.id)
+      )
+    }
     if (typeof room.custom_category === 'string') setCustomCategory(room.custom_category)
     if (typeof room.custom_topic === 'string') setCustomTopic(room.custom_topic)
     if (WORD_SOURCES.some((option) => option.id === room.word_source)) {
@@ -440,6 +500,9 @@ export default function App() {
           votes: {},
           timer_mode: selectedTimerMode,
           selection_mode: topicSelectionMode,
+          ...(topicSelectionMode === 'random'
+            ? { random_categories: selectedRandomCategoryIds }
+            : {}),
           custom_category: customCategory.trim(),
           custom_topic: customTopic.trim(),
           word_source: selectedWordSource,
@@ -528,6 +591,30 @@ export default function App() {
     if (nextMode === 'custom') setSelectedWordSource('ai')
   }
 
+  const handleRandomCategoryToggle = (categoryId) => {
+    const allCategoryIds = CATEGORY_CATALOG.map((category) => category.id)
+
+    if (categoryId === 'all') {
+      setSelectedRandomCategoryIds(allCategoryIds)
+      return
+    }
+
+    if (!allCategoryIds.includes(categoryId)) return
+
+    setSelectedRandomCategoryIds((currentIds) => {
+      const validCurrentIds = currentIds.filter((id) => allCategoryIds.includes(id))
+      const isAllSelected = validCurrentIds.length === allCategoryIds.length
+
+      if (isAllSelected) return [categoryId]
+      if (!validCurrentIds.includes(categoryId)) {
+        return [...validCurrentIds, categoryId]
+      }
+      if (validCurrentIds.length === 1) return validCurrentIds
+
+      return validCurrentIds.filter((id) => id !== categoryId)
+    })
+  }
+
   const handleHintModeChange = (nextHintMode) => {
     if (HINT_MODES.some((option) => option.id === nextHintMode)) {
       setSelectedHintMode(nextHintMode)
@@ -553,6 +640,9 @@ export default function App() {
           selected_category: selectedCategoryId,
           selected_subcategory: selectedSubcategoryId,
           selection_mode: topicSelectionMode,
+          ...(topicSelectionMode === 'random'
+            ? { random_categories: selectedRandomCategoryIds }
+            : {}),
           custom_category: customCategory.trim(),
           custom_topic: customTopic.trim(),
           word_source: selectedWordSource,
@@ -589,6 +679,12 @@ export default function App() {
   }
 
   const handleLocalRevealComplete = () => {
+    if (selectedLocalGameMode === 'time-target') {
+      setTimeTrialAttempts([])
+      setStage('TIME_TRIAL')
+      return
+    }
+
     setTimer(STAGE_TIMERS.DISCUSSION)
     setPhaseEndsAt(
       selectedTimerMode === 'timed'
@@ -596,6 +692,13 @@ export default function App() {
         : null
     )
     setStage('DISCUSSION')
+  }
+
+  const handleTimeTrialComplete = (attempts) => {
+    setTimeTrialAttempts(attempts)
+    setIsLocalImposterRevealed(false)
+    setPhaseEndsAt(null)
+    setStage('RESULTS')
   }
 
   const handleBeginOnlineDiscussion = async () => {
@@ -695,6 +798,8 @@ export default function App() {
       setVotes({})
       setHasVoted(false)
       setIsLocalImposterRevealed(false)
+      setTimeTargetTicks(null)
+      setTimeTrialAttempts([])
       setTimer(STAGE_TIMERS.DISCUSSION)
       setPhaseEndsAt(null)
       setRevealIndex(0)
@@ -787,8 +892,22 @@ export default function App() {
     HINT_MODES.find((option) => option.id === selectedHintMode)
     || HINT_MODES[0]
   )
+  const selectedLocalGameModeDetails = (
+    LOCAL_GAME_MODES.find((option) => option.id === selectedLocalGameMode)
+    || LOCAL_GAME_MODES[0]
+  )
+  const randomCategoryNames = CATEGORY_CATALOG
+    .filter((category) => selectedRandomCategoryIds.includes(category.id))
+    .map((category) => category.name)
+  const allRandomCategoriesSelected = (
+    randomCategoryNames.length === CATEGORY_CATALOG.length
+  )
   const gameSelectionSummary = topicSelectionMode === 'random'
-    ? 'Random category & topic'
+    ? `Random / ${
+      allRandomCategoriesSelected
+        ? 'All categories'
+        : randomCategoryNames.join(', ')
+    }`
     : topicSelectionMode === 'custom'
       ? `${customCategory.trim() || 'Custom category'} / ${customTopic.trim() || 'Add a topic'}`
       : `${selectedCategory.name} / ${selectedSubcategory.name}`
@@ -800,6 +919,7 @@ export default function App() {
     categoryId: selectedCategoryId,
     subcategoryId: selectedSubcategoryId,
     selectionMode: topicSelectionMode,
+    randomCategoryIds: selectedRandomCategoryIds,
     customCategory,
     customTopic,
     wordSource: selectedWordSource,
@@ -810,6 +930,7 @@ export default function App() {
     onCategoryChange: handleCategoryChange,
     onSubcategoryChange: handleSubcategoryChange,
     onSelectionModeChange: handleTopicSelectionModeChange,
+    onRandomCategoryToggle: handleRandomCategoryToggle,
     onCustomCategoryChange: setCustomCategory,
     onCustomTopicChange: setCustomTopic,
     onWordSourceChange: handleWordSourceChange,
@@ -832,6 +953,9 @@ export default function App() {
         gameSelectionSummary={gameSelectionSummary}
         selectedTimerModeDetails={selectedTimerModeDetails}
         selectedHintModeDetails={selectedHintModeDetails}
+        selectedLocalGameMode={selectedLocalGameMode}
+        selectedLocalGameModeDetails={selectedLocalGameModeDetails}
+        onLocalGameModeChange={setSelectedLocalGameMode}
         categoryDisplayMode={selectedCategoryDisplayMode}
         areGameSettingsValid={areGameSettingsValid}
         isSettingsOpen={isSettingsOpen}
@@ -870,6 +994,16 @@ export default function App() {
         lobbyMode={lobbyMode}
         onlinePlayers={onlinePlayers}
         onBeginOnlineDiscussion={handleBeginOnlineDiscussion}
+        localGameMode={selectedLocalGameMode}
+      />
+    )
+  }
+
+  if (gameStage === 'TIME_TRIAL' && isLocalMode) {
+    return (
+      <TimeTrialScreen
+        players={playerRoles}
+        onComplete={handleTimeTrialComplete}
       />
     )
   }
@@ -912,6 +1046,9 @@ export default function App() {
         lobbyMode={lobbyMode}
         roomCode={roomCode}
         onLeaveRoom={handleLeaveOnlineRoom}
+        localGameMode={selectedLocalGameMode}
+        timeTargetTicks={timeTargetTicks}
+        timeTrialAttempts={timeTrialAttempts}
       />
     )
   }

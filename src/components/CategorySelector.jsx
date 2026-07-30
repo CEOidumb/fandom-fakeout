@@ -22,6 +22,7 @@ export default function CategorySelector({
   categoryId,
   subcategoryId,
   selectionMode,
+  randomCategoryIds,
   customCategory,
   customTopic,
   wordSource,
@@ -32,6 +33,7 @@ export default function CategorySelector({
   onCategoryChange,
   onSubcategoryChange,
   onSelectionModeChange,
+  onRandomCategoryToggle,
   onCustomCategoryChange,
   onCustomTopicChange,
   onWordSourceChange,
@@ -48,6 +50,9 @@ export default function CategorySelector({
   const hintModeDetails = HINT_MODES.find((option) => option.id === hintMode) || HINT_MODES[0]
   const categoryDisplayDetails = CATEGORY_DISPLAY_MODES.find((option) => option.id === categoryDisplayMode) || CATEGORY_DISPLAY_MODES[0]
   const selectionModeDetails = TOPIC_SELECTION_MODES.find((option) => option.id === selectionMode) || TOPIC_SELECTION_MODES[0]
+  const allRandomCategoriesSelected = (
+    randomCategoryIds.length === CATEGORY_CATALOG.length
+  )
 
   return (
     <div className="my-6 rounded-2xl border border-white/10 bg-slate-950/40 p-4 text-left sm:p-5">
@@ -118,9 +123,41 @@ export default function CategorySelector({
 
       {selectionMode === 'random' && (
         <div className="mt-5 rounded-2xl border border-violet-400/20 bg-violet-500/5 p-4">
-          <span className="block text-sm font-bold text-violet-200">Mystery selection</span>
+          <span className="block text-sm font-bold text-violet-200">
+            Choose the random category pool
+          </span>
           <p className="mt-1 text-xs leading-relaxed text-slate-400">
-            Every new round randomly picks one category and one specific topic from the full game library.
+            Random will choose one topic from only the categories selected below.
+          </p>
+
+          <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
+            <button
+              type="button"
+              onClick={() => onRandomCategoryToggle('all')}
+              className={`${choiceClass(allRandomCategoriesSelected)} col-span-2 sm:col-span-3`}
+            >
+              All Categories
+            </button>
+            {CATEGORY_CATALOG.map((catalogCategory) => (
+              <button
+                key={catalogCategory.id}
+                type="button"
+                onClick={() => onRandomCategoryToggle(catalogCategory.id)}
+                className={choiceClass(
+                  randomCategoryIds.includes(catalogCategory.id)
+                )}
+              >
+                {catalogCategory.name}
+              </button>
+            ))}
+          </div>
+
+          <p className="mt-3 text-xs text-slate-400">
+            {allRandomCategoriesSelected
+              ? 'All categories can be selected.'
+              : `${randomCategoryIds.length} ${
+                randomCategoryIds.length === 1 ? 'category' : 'categories'
+              } selected.`}
           </p>
         </div>
       )}

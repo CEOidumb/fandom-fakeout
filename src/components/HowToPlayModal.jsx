@@ -90,6 +90,16 @@ export default function HowToPlayModal({ isOpen, onClose }) {
           ))}
         </ol>
 
+        <div className="mb-3 rounded-2xl border border-cyan-400/20 bg-cyan-500/5 p-4 text-left">
+          <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-cyan-300">
+            Local mode: Time Target
+          </span>
+          <p className="mt-2 text-sm leading-relaxed text-slate-400">
+            Civilians see the exact target time while the Imposter only sees a nearby
+            range. Each player stops the clock once, then the group compares every result.
+          </p>
+        </div>
+
         <div className="mb-6 rounded-2xl border border-amber-400/20 bg-amber-500/5 p-4 text-left">
           <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-amber-300">
             How to win

@@ -17,6 +17,9 @@ alter table public.rooms
   add column if not exists selection_mode text not null default 'catalog';
 
 alter table public.rooms
+  add column if not exists random_categories jsonb not null default '[]'::jsonb;
+
+alter table public.rooms
   add column if not exists custom_category text not null default '';
 
 alter table public.rooms

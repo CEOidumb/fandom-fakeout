@@ -54,3 +54,18 @@ export const TIMER_MODES = [
 ]
 
 export const DEFAULT_TIMER_MODE = 'timed'
+
+export const LOCAL_GAME_MODES = [
+  {
+    id: 'word-hunt',
+    name: 'Word Hunt',
+    description: 'The classic game: share clues about a secret word and find the Imposter.',
+  },
+  {
+    id: 'time-target',
+    name: 'Time Target',
+    description: 'Stop a stopwatch near the secret target without exposing what you know.',
+  },
+]
+
+export const DEFAULT_LOCAL_GAME_MODE = 'word-hunt'

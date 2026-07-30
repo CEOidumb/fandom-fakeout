@@ -12,10 +12,12 @@ export default function RevealScreen({
   lobbyMode,
   onlinePlayers,
   onBeginOnlineDiscussion,
+  localGameMode,
 }) {
   if (isLocalMode) {
     const currentPlayer = playerRoles[revealIndex]
     const isLastPlayer = revealIndex === playerRoles.length - 1
+    const isTimeTargetMode = localGameMode === 'time-target'
 
     return (
       <GameScreen>
@@ -26,7 +28,8 @@ export default function RevealScreen({
           {currentPlayer?.name}&apos;s Turn
         </h2>
         <p className="mt-2 mb-8 text-sm leading-relaxed text-slate-400">
-          Hand the device to {currentPlayer?.name}. Press and hold the card below to sneak a peek.
+          Hand the device to {currentPlayer?.name}. Press and hold the card below to{' '}
+          {isTimeTargetMode ? 'see their private timing clue.' : 'sneak a peek.'}
         </p>
         <div
           onMouseDown={() => setIsHolding(true)}
@@ -43,9 +46,11 @@ export default function RevealScreen({
           {isHolding ? (
             <div>
               <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                {currentPlayer?.role === 'Imposter'
-                  ? (currentPlayer?.word ? 'Your hint' : 'Your assignment')
-                  : 'Your secret word'}
+                {isTimeTargetMode
+                  ? (currentPlayer?.role === 'Imposter' ? 'Your target range' : 'Your exact target')
+                  : currentPlayer?.role === 'Imposter'
+                    ? (currentPlayer?.word ? 'Your hint' : 'Your assignment')
+                    : 'Your secret word'}
               </span>
               <span className={`text-3xl font-black ${
                 currentPlayer?.role === 'Imposter' ? 'text-rose-300' : 'text-violet-200'
@@ -55,7 +60,7 @@ export default function RevealScreen({
               <span className="mt-3 block text-xs font-medium text-slate-400">
                 Role: {currentPlayer?.role}
               </span>
-              {currentPlayer?.category && (
+              {currentPlayer?.category && !isTimeTargetMode && (
                 <span className="mt-2 block text-sm text-slate-300">
                   <strong className="text-slate-200">Category:</strong>{' '}
                   {currentPlayer.category}
@@ -80,7 +85,9 @@ export default function RevealScreen({
             }}
             className="mt-8 w-full rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-4 font-bold text-white shadow-lg shadow-violet-900/40 transition hover:from-violet-500 hover:to-indigo-500"
           >
-            {isLastPlayer ? 'Go to Discussion' : 'Next Player →'}
+            {isLastPlayer
+              ? (isTimeTargetMode ? 'Start Time Challenge' : 'Go to Discussion')
+              : 'Next Player →'}
           </button>
         )}
       </GameScreen>

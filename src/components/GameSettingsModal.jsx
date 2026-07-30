@@ -17,11 +17,11 @@ export default function GameSettingsModal({
       <section
         aria-labelledby="game-settings-title"
         aria-modal="true"
-        className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-3xl border border-white/10 bg-slate-900 p-5 shadow-2xl shadow-violet-950/60 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:p-6"
+        className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-3xl border border-white/10 bg-slate-900 shadow-2xl shadow-violet-950/60 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         role="dialog"
         onMouseDown={(event) => event.stopPropagation()}
       >
-        <div className="flex items-start justify-between gap-4">
+        <div className="sticky top-0 z-20 flex items-start justify-between gap-4 border-b border-white/[0.06] bg-slate-900/95 p-5 shadow-lg shadow-slate-950/20 backdrop-blur sm:p-6">
           <div>
             <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-violet-300">
               Room Setup
@@ -55,15 +55,17 @@ export default function GameSettingsModal({
           </button>
         </div>
 
-        <CategorySelector {...categorySelectorProps} />
+        <div className="p-5 pt-0 sm:p-6 sm:pt-0">
+          <CategorySelector {...categorySelectorProps} />
 
-        <button
-          type="button"
-          onClick={onSave}
-          className="w-full rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-3.5 font-bold text-white shadow-lg shadow-violet-900/40 transition hover:from-violet-500 hover:to-indigo-500"
-        >
-          Save Settings
-        </button>
+          <button
+            type="button"
+            onClick={onSave}
+            className="w-full rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-3.5 font-bold text-white shadow-lg shadow-violet-900/40 transition hover:from-violet-500 hover:to-indigo-500"
+          >
+            Save Settings
+          </button>
+        </div>
       </section>
     </div>
   )

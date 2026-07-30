@@ -1,67 +1,112 @@
 import GameScreen from '../components/GameScreen'
 import { calculateVoteResult } from '../utils/gameLogic'
+import {
+  formatStopwatchTime,
+  formatTimeTicks,
+} from '../utils/timeTarget'
 
 function LocalResults({
   playerRoles,
   isImposterRevealed,
   onRevealImposter,
   onResetGame,
+  localGameMode,
+  timeTargetTicks,
+  timeTrialAttempts,
 }) {
   const imposter = playerRoles.find((player) => player.role === 'Imposter')
   const civilianWord = playerRoles.find((player) => player.role === 'Civilian')?.word
+  const isTimeTargetMode = localGameMode === 'time-target'
 
   return (
     <GameScreen>
       {!isImposterRevealed ? (
-        <>
-          <span className="inline-flex rounded-full border border-violet-400/30 bg-violet-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.25em] text-violet-200">
-            Discussion Complete
-          </span>
-          <h2 className="mt-5 text-3xl font-black tracking-tight">Ready for the reveal?</h2>
-          <p className="mt-2 mb-8 text-sm leading-relaxed text-slate-400">
-            Make sure everyone has finished their guesses before showing the answer.
-          </p>
-          <div className="mb-6 rounded-2xl border border-white/10 bg-white/[0.02] p-8">
-            <span className="mb-3 block text-4xl">?</span>
-            <p className="text-sm font-semibold text-slate-300">
-              The Imposter is still hidden
+        isTimeTargetMode ? (
+          <>
+            <span className="inline-flex rounded-full border border-cyan-400/30 bg-cyan-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.25em] text-cyan-200">
+              All Times Locked
+            </span>
+            <h2 className="mt-5 text-3xl font-black tracking-tight">Who knew the target?</h2>
+            <p className="mt-2 mb-6 text-sm leading-relaxed text-slate-400">
+              Compare where everyone stopped and make your final accusation.
             </p>
-          </div>
-          <button
-            type="button"
-            onClick={onRevealImposter}
-            className="w-full rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-4 font-bold text-white shadow-lg shadow-violet-900/40 transition hover:from-violet-500 hover:to-indigo-500"
-          >
-            Reveal the Imposter
-          </button>
-        </>
+
+            <ol className="mb-6 space-y-2 text-left">
+              {timeTrialAttempts.map((attempt, index) => (
+                <li
+                  key={`${attempt.name}-${index}`}
+                  className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3"
+                >
+                  <span className="min-w-0 truncate font-bold text-slate-300">
+                    {attempt.name}
+                  </span>
+                  <span className="shrink-0 font-mono text-xl font-black text-cyan-200">
+                    {formatStopwatchTime(attempt.centiseconds)}
+                  </span>
+                </li>
+              ))}
+            </ol>
+
+            <button
+              type="button"
+              onClick={onRevealImposter}
+              className="w-full rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-4 font-bold text-white shadow-lg shadow-violet-900/40 transition hover:from-violet-500 hover:to-indigo-500"
+            >
+              Reveal the Imposter
+            </button>
+          </>
+        ) : (
+          <>
+            <span className="inline-flex rounded-full border border-violet-400/30 bg-violet-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.25em] text-violet-200">
+              Discussion Complete
+            </span>
+            <h2 className="mt-5 text-3xl font-black tracking-tight">Ready for the reveal?</h2>
+            <p className="mt-2 mb-8 text-sm leading-relaxed text-slate-400">
+              Make sure everyone has finished their guesses before showing the answer.
+            </p>
+            <div className="mb-6 rounded-2xl border border-white/10 bg-white/[0.02] p-8">
+              <span className="mb-3 block text-4xl">?</span>
+              <p className="text-sm font-semibold text-slate-300">
+                The Imposter is still hidden
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={onRevealImposter}
+              className="w-full rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-4 font-bold text-white shadow-lg shadow-violet-900/40 transition hover:from-violet-500 hover:to-indigo-500"
+            >
+              Reveal the Imposter
+            </button>
+          </>
+        )
       ) : (
         <>
           <span className="inline-flex rounded-full border border-rose-400/30 bg-rose-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.25em] text-rose-300">
             Imposter Revealed
           </span>
-          <p className="mt-6 text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
-            The Imposter was
-          </p>
-          <h2 className="mt-2 text-4xl font-black tracking-tight text-rose-300">
-            {imposter?.name || 'Unknown'}
-          </h2>
-          <div className="my-8 space-y-4 rounded-2xl border border-white/10 bg-white/[0.02] p-5 text-left">
-            <div>
-              <span className="block text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-                Civilian word
-              </span>
-              <span className="mt-1 block text-xl font-bold text-violet-200">
-                {civilianWord || 'Unknown'}
-              </span>
-            </div>
-            <div>
-              <span className="block text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-                Imposter hint
-              </span>
-              <span className="mt-1 block text-xl font-bold text-rose-200">
-                {imposter?.word || 'Unknown'}
-              </span>
+          <div className="relative my-8 py-4">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute left-1/2 top-10 h-28 w-56 -translate-x-1/2 rounded-full bg-rose-500/15 blur-3xl"
+            />
+            <div className="relative">
+              <p className="text-xs font-bold uppercase tracking-[0.3em] text-slate-500">
+                The Imposter was
+              </p>
+              <h2 className="mt-3 break-words text-5xl font-black tracking-tight text-rose-300 drop-shadow-[0_0_24px_rgba(253,164,175,0.25)]">
+                {imposter?.name || 'Unknown'}
+              </h2>
+
+              <div className="mx-auto my-8 h-px w-24 bg-gradient-to-r from-transparent via-violet-400/60 to-transparent" />
+
+              <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-slate-500">
+                {isTimeTargetMode ? 'The target was' : 'The word was'}
+              </p>
+              <p className="mt-3 break-words text-2xl font-black text-violet-200">
+                {isTimeTargetMode
+                  ? formatTimeTicks(timeTargetTicks)
+                  : (civilianWord || 'Unknown')}
+              </p>
             </div>
           </div>
           <button

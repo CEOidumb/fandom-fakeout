@@ -24,6 +24,7 @@ export default function useRoomSync({
   setSelectedCategoryId,
   setSelectedSubcategoryId,
   setTopicSelectionMode,
+  setSelectedRandomCategoryIds,
   setCustomCategory,
   setCustomTopic,
   setSelectedWordSource,
@@ -87,6 +88,17 @@ export default function useRoomSync({
 
         if (TOPIC_SELECTION_MODES.some((option) => option.id === roomRow.selection_mode)) {
           setTopicSelectionMode(roomRow.selection_mode)
+        }
+
+        if (Array.isArray(roomRow.random_categories)) {
+          const validCategoryIds = roomRow.random_categories.filter((categoryId) => (
+            CATEGORY_CATALOG.some((category) => category.id === categoryId)
+          ))
+          setSelectedRandomCategoryIds(
+            validCategoryIds.length > 0
+              ? validCategoryIds
+              : CATEGORY_CATALOG.map((category) => category.id)
+          )
         }
 
         if (typeof roomRow.custom_category === 'string') {
@@ -235,6 +247,7 @@ export default function useRoomSync({
     setSelectedCategoryId,
     setSelectedSubcategoryId,
     setTopicSelectionMode,
+    setSelectedRandomCategoryIds,
     setCustomCategory,
     setCustomTopic,
     setSelectedWordSource,

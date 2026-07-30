@@ -245,6 +245,58 @@ export const CATEGORY_CATALOG = [
           { regular: 'Gyrosphere', undercover: 'Vehicle' },
         ],
       },
+      {
+        id: 'dc',
+        name: 'DC',
+        description: 'Heroes, villains, cities, teams, and iconic gadgets.',
+        words: [
+          { regular: 'Batman', undercover: 'Gotham' },
+          { regular: 'Superman', undercover: 'Krypton' },
+          { regular: 'Wonder Woman', undercover: 'Amazon' },
+          { regular: 'Joker', undercover: 'Clown' },
+          { regular: 'Batmobile', undercover: 'Vehicle' },
+          { regular: 'Justice League', undercover: 'Team' },
+        ],
+      },
+      {
+        id: 'lord-of-the-rings',
+        name: 'Lord of the Rings',
+        description: 'Heroes, creatures, kingdoms, artifacts, and Middle-earth.',
+        words: [
+          { regular: 'Frodo', undercover: 'Hobbit' },
+          { regular: 'One Ring', undercover: 'Artifact' },
+          { regular: 'Gandalf', undercover: 'Wizard' },
+          { regular: 'Mordor', undercover: 'Realm' },
+          { regular: 'Aragorn', undercover: 'King' },
+          { regular: 'Gollum', undercover: 'Creature' },
+        ],
+      },
+      {
+        id: 'fast-and-furious',
+        name: 'Fast & Furious',
+        description: 'Drivers, cars, races, missions, and family.',
+        words: [
+          { regular: 'Dominic Toretto', undercover: 'Driver' },
+          { regular: 'Brian OConner', undercover: 'Undercover' },
+          { regular: 'Dodge Charger', undercover: 'Muscle Car' },
+          { regular: 'Tokyo Drift', undercover: 'Racing Style' },
+          { regular: 'Letty Ortiz', undercover: 'Racer' },
+          { regular: 'Nitrous', undercover: 'Speed Boost' },
+        ],
+      },
+      {
+        id: 'shrek',
+        name: 'Shrek',
+        description: 'Fairy-tale characters, kingdoms, creatures, and locations.',
+        words: [
+          { regular: 'Shrek', undercover: 'Ogre' },
+          { regular: 'Donkey', undercover: 'Sidekick' },
+          { regular: 'Fiona', undercover: 'Princess' },
+          { regular: 'Far Far Away', undercover: 'Kingdom' },
+          { regular: 'Puss in Boots', undercover: 'Cat' },
+          { regular: 'Dragon', undercover: 'Fire-Breather' },
+        ],
+      },
     ],
   },
   {
@@ -328,6 +380,58 @@ export const CATEGORY_CATALOG = [
           { regular: 'Drogon', undercover: 'Dragon' },
           { regular: 'White Walker', undercover: 'Creature' },
           { regular: 'House Stark', undercover: 'Family' },
+        ],
+      },
+      {
+        id: 'friends',
+        name: 'Friends',
+        description: 'Characters, apartments, relationships, jokes, and New York hangouts.',
+        words: [
+          { regular: 'Central Perk', undercover: 'Coffee Shop' },
+          { regular: 'Ross Geller', undercover: 'Paleontologist' },
+          { regular: 'Rachel Green', undercover: 'Fashion' },
+          { regular: 'Joey Tribbiani', undercover: 'Actor' },
+          { regular: 'Monica Geller', undercover: 'Chef' },
+          { regular: 'Smelly Cat', undercover: 'Song' },
+        ],
+      },
+      {
+        id: 'the-boys',
+        name: 'The Boys',
+        description: 'Supes, vigilantes, corporations, powers, and rival teams.',
+        words: [
+          { regular: 'Homelander', undercover: 'Supe' },
+          { regular: 'Billy Butcher', undercover: 'Vigilante' },
+          { regular: 'Vought', undercover: 'Corporation' },
+          { regular: 'Starlight', undercover: 'Hero' },
+          { regular: 'Compound V', undercover: 'Serum' },
+          { regular: 'The Seven', undercover: 'Team' },
+        ],
+      },
+      {
+        id: 'squid-game',
+        name: 'Squid Game',
+        description: 'Players, masked workers, childhood games, prizes, and survival.',
+        words: [
+          { regular: 'Player 456', undercover: 'Contestant' },
+          { regular: 'Red Light Green Light', undercover: 'Game' },
+          { regular: 'Front Man', undercover: 'Leader' },
+          { regular: 'Dalgona', undercover: 'Candy' },
+          { regular: 'Pink Guard', undercover: 'Worker' },
+          { regular: 'Glass Bridge', undercover: 'Challenge' },
+        ],
+      },
+      {
+        id: 'the-walking-dead',
+        name: 'The Walking Dead',
+        description: 'Survivors, settlements, weapons, enemies, and walkers.',
+        words: [
+          { regular: 'Rick Grimes', undercover: 'Sheriff' },
+          { regular: 'Daryl Dixon', undercover: 'Crossbow' },
+          { regular: 'Negan', undercover: 'Leader' },
+          { regular: 'Lucille', undercover: 'Bat' },
+          { regular: 'Alexandria', undercover: 'Settlement' },
+          { regular: 'Walker', undercover: 'Zombie' },
         ],
       },
     ],
@@ -428,6 +532,58 @@ export const CATEGORY_CATALOG = [
           { regular: 'Shenron', undercover: 'Dragon' },
         ],
       },
+      {
+        id: 'death-note',
+        name: 'Death Note',
+        description: 'Detectives, notebooks, Shinigami, identities, and mind games.',
+        words: [
+          { regular: 'Light Yagami', undercover: 'Kira' },
+          { regular: 'L', undercover: 'Detective' },
+          { regular: 'Death Note', undercover: 'Notebook' },
+          { regular: 'Ryuk', undercover: 'Shinigami' },
+          { regular: 'Misa Amane', undercover: 'Idol' },
+          { regular: 'Apple', undercover: 'Snack' },
+        ],
+      },
+      {
+        id: 'hunter-x-hunter',
+        name: 'Hunter x Hunter',
+        description: 'Hunters, Nen abilities, exams, families, and dangerous journeys.',
+        words: [
+          { regular: 'Gon', undercover: 'Hunter' },
+          { regular: 'Killua', undercover: 'Assassin' },
+          { regular: 'Nen', undercover: 'Energy' },
+          { regular: 'Hisoka', undercover: 'Magician' },
+          { regular: 'Kurapika', undercover: 'Scarlet Eyes' },
+          { regular: 'Chimera Ant', undercover: 'Creature' },
+        ],
+      },
+      {
+        id: 'bleach',
+        name: 'Bleach',
+        description: 'Soul Reapers, spirits, swords, squads, and supernatural worlds.',
+        words: [
+          { regular: 'Ichigo', undercover: 'Soul Reaper' },
+          { regular: 'Zanpakuto', undercover: 'Sword' },
+          { regular: 'Bankai', undercover: 'Release' },
+          { regular: 'Soul Society', undercover: 'Realm' },
+          { regular: 'Rukia', undercover: 'Shinigami' },
+          { regular: 'Hollow', undercover: 'Spirit' },
+        ],
+      },
+      {
+        id: 'chainsaw-man',
+        name: 'Chainsaw Man',
+        description: 'Devil hunters, contracts, transformations, fiends, and missions.',
+        words: [
+          { regular: 'Denji', undercover: 'Devil Hunter' },
+          { regular: 'Pochita', undercover: 'Chainsaw Devil' },
+          { regular: 'Power', undercover: 'Fiend' },
+          { regular: 'Makima', undercover: 'Handler' },
+          { regular: 'Aki', undercover: 'Hunter' },
+          { regular: 'Devil Contract', undercover: 'Agreement' },
+        ],
+      },
     ],
   },
   {
@@ -508,6 +664,66 @@ export const CATEGORY_CATALOG = [
           { regular: 'Doorbell', undercover: 'Visitor' },
           { regular: 'Alarm Clock', undercover: 'Morning' },
           { regular: 'Extension Cord', undercover: 'Outlet' },
+        ],
+      },
+      {
+        id: 'clothing-accessories',
+        name: 'Clothing & Accessories',
+        description: 'Everyday clothes, footwear, jewelry, and wearable accessories.',
+        words: [
+          { regular: 'Hoodie', undercover: 'Drawstring' },
+          { regular: 'Sneakers', undercover: 'Laces' },
+          { regular: 'Sunglasses', undercover: 'Shade' },
+          { regular: 'Baseball Cap', undercover: 'Brim' },
+          { regular: 'Wristwatch', undercover: 'Time' },
+          { regular: 'Beanie', undercover: 'Winter' },
+          { regular: 'Necklace', undercover: 'Pendant' },
+          { regular: 'Belt', undercover: 'Buckle' },
+        ],
+      },
+      {
+        id: 'bathroom-items',
+        name: 'Bathroom Items',
+        description: 'Objects used for bathing, grooming, cleaning, and daily routines.',
+        words: [
+          { regular: 'Toothbrush', undercover: 'Bristles' },
+          { regular: 'Shampoo', undercover: 'Lather' },
+          { regular: 'Towel', undercover: 'Drying' },
+          { regular: 'Hair Dryer', undercover: 'Hot Air' },
+          { regular: 'Razor', undercover: 'Shaving' },
+          { regular: 'Bath Mat', undercover: 'Floor' },
+          { regular: 'Plunger', undercover: 'Drain' },
+          { regular: 'Shower Curtain', undercover: 'Tub' },
+        ],
+      },
+      {
+        id: 'tools',
+        name: 'Tools',
+        description: 'Hand tools and equipment used to build, repair, and measure.',
+        words: [
+          { regular: 'Hammer', undercover: 'Nail' },
+          { regular: 'Screwdriver', undercover: 'Screw' },
+          { regular: 'Wrench', undercover: 'Bolt' },
+          { regular: 'Tape Measure', undercover: 'Length' },
+          { regular: 'Power Drill', undercover: 'Bit' },
+          { regular: 'Level', undercover: 'Bubble' },
+          { regular: 'Pliers', undercover: 'Grip' },
+          { regular: 'Toolbox', undercover: 'Storage' },
+        ],
+      },
+      {
+        id: 'travel-items',
+        name: 'Travel Items',
+        description: 'Useful objects for trips, airports, hotels, and exploring.',
+        words: [
+          { regular: 'Suitcase', undercover: 'Luggage' },
+          { regular: 'Passport', undercover: 'Border' },
+          { regular: 'Boarding Pass', undercover: 'Gate' },
+          { regular: 'Travel Pillow', undercover: 'Neck' },
+          { regular: 'Luggage Tag', undercover: 'Name' },
+          { regular: 'Camera', undercover: 'Memories' },
+          { regular: 'Adapter', undercover: 'Outlet' },
+          { regular: 'Map', undercover: 'Directions' },
         ],
       },
     ],
@@ -637,6 +853,66 @@ export const CATEGORY_CATALOG = [
           { regular: 'Madison Square Garden', undercover: 'New York Fight' },
         ],
       },
+      {
+        id: 'volleyball',
+        name: 'Volleyball',
+        description: 'Players, positions, court areas, tournaments, and match terminology.',
+        words: [
+          { regular: 'Karch Kiraly', undercover: 'Olympian' },
+          { regular: 'Misty May-Treanor', undercover: 'Beach' },
+          { regular: 'Spike', undercover: 'Attack' },
+          { regular: 'Libero', undercover: 'Defender' },
+          { regular: 'Ace', undercover: 'Serve' },
+          { regular: 'Rotation', undercover: 'Positions' },
+          { regular: 'Set', undercover: 'Assist' },
+          { regular: 'Net', undercover: 'Divider' },
+        ],
+      },
+      {
+        id: 'golf',
+        name: 'Golf',
+        description: 'Famous golfers, major tournaments, clubs, courses, and scoring terms.',
+        words: [
+          { regular: 'Tiger Woods', undercover: 'Red Shirt' },
+          { regular: 'Rory McIlroy', undercover: 'Northern Ireland' },
+          { regular: 'The Masters', undercover: 'Green Jacket' },
+          { regular: 'Putter', undercover: 'Green' },
+          { regular: 'Birdie', undercover: 'Under Par' },
+          { regular: 'Bunker', undercover: 'Sand' },
+          { regular: 'Caddie', undercover: 'Bag' },
+          { regular: 'Hole in One', undercover: 'Ace' },
+        ],
+      },
+      {
+        id: 'mma',
+        name: 'MMA',
+        description: 'Fighters, promotions, weight classes, techniques, and combat terms.',
+        words: [
+          { regular: 'Jon Jones', undercover: 'Champion' },
+          { regular: 'Conor McGregor', undercover: 'Ireland' },
+          { regular: 'Amanda Nunes', undercover: 'Lioness' },
+          { regular: 'UFC', undercover: 'Promotion' },
+          { regular: 'Octagon', undercover: 'Cage' },
+          { regular: 'Submission', undercover: 'Tap Out' },
+          { regular: 'Takedown', undercover: 'Wrestling' },
+          { regular: 'Flyweight', undercover: 'Division' },
+        ],
+      },
+      {
+        id: 'track-and-field',
+        name: 'Track & Field',
+        description: 'Famous athletes, races, jumps, throwing events, and records.',
+        words: [
+          { regular: 'Usain Bolt', undercover: 'Sprinter' },
+          { regular: 'Sydney McLaughlin-Levrone', undercover: 'Hurdles' },
+          { regular: 'Noah Lyles', undercover: 'Sprint' },
+          { regular: 'Relay', undercover: 'Baton' },
+          { regular: 'Pole Vault', undercover: 'Bar' },
+          { regular: 'Shot Put', undercover: 'Throw' },
+          { regular: 'Starting Blocks', undercover: 'Launch' },
+          { regular: 'Photo Finish', undercover: 'Close Race' },
+        ],
+      },
     ],
   },
 ]
@@ -658,9 +934,16 @@ export function getRandomWordPair(categoryId, subcategoryId) {
   return subcategory.words[Math.floor(Math.random() * subcategory.words.length)]
 }
 
-export function getRandomCategorySelection() {
-  const category = CATEGORY_CATALOG[
-    Math.floor(Math.random() * CATEGORY_CATALOG.length)
+export function getRandomCategorySelection(allowedCategoryIds = []) {
+  const allowedIds = new Set(allowedCategoryIds)
+  const categoryPool = CATEGORY_CATALOG.filter((category) => (
+    allowedIds.has(category.id)
+  ))
+  const availableCategories = categoryPool.length > 0
+    ? categoryPool
+    : CATEGORY_CATALOG
+  const category = availableCategories[
+    Math.floor(Math.random() * availableCategories.length)
   ]
   const subcategory = category.subcategories[
     Math.floor(Math.random() * category.subcategories.length)

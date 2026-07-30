@@ -2,6 +2,7 @@ import { useState } from 'react'
 import AiLoadingOverlay from '../components/AiLoadingOverlay'
 import GameSettingsModal from '../components/GameSettingsModal'
 import HowToPlayModal from '../components/HowToPlayModal'
+import LocalModeSelector from '../components/LocalModeSelector'
 import SyncBadge from '../components/SyncBadge'
 
 function SettingsButton({
@@ -81,6 +82,9 @@ export default function LobbyScreen({
   gameSelectionSummary,
   selectedTimerModeDetails,
   selectedHintModeDetails,
+  selectedLocalGameMode,
+  selectedLocalGameModeDetails,
+  onLocalGameModeChange,
   categoryDisplayMode,
   areGameSettingsValid,
   isSettingsOpen,
@@ -104,6 +108,9 @@ export default function LobbyScreen({
 }) {
   const [isHowToPlayOpen, setIsHowToPlayOpen] = useState(false)
   const [didCopyRoomCode, setDidCopyRoomCode] = useState(false)
+  const areLocalSettingsValid = (
+    selectedLocalGameMode === 'time-target' || areGameSettingsValid
+  )
 
   const copyRoomCode = async () => {
     if (!roomCode) return
@@ -260,28 +267,34 @@ export default function LobbyScreen({
                     <NumberedPlayerList players={localPlayers} />
                   </div>
                 )}
-                <SettingsButton
-                  selectionSummary={gameSelectionSummary}
-                  timerMode={selectedTimerModeDetails}
-                  hintMode={selectedHintModeDetails}
-                  categoryDisplayMode={categoryDisplayMode}
-                  onClick={() => setIsSettingsOpen(true)}
+                {selectedLocalGameMode === 'word-hunt' && (
+                  <SettingsButton
+                    selectionSummary={gameSelectionSummary}
+                    timerMode={selectedTimerModeDetails}
+                    hintMode={selectedHintModeDetails}
+                    categoryDisplayMode={categoryDisplayMode}
+                    onClick={() => setIsSettingsOpen(true)}
+                  />
+                )}
+                <LocalModeSelector
+                  selectedMode={selectedLocalGameMode}
+                  onModeChange={onLocalGameModeChange}
                 />
                 <button
                   type="button"
                   onClick={onStartLocalGame}
-                  disabled={localPlayers.length < 3 || isGeneratingWordPair || !areGameSettingsValid}
+                  disabled={localPlayers.length < 3 || isGeneratingWordPair || !areLocalSettingsValid}
                   className={`w-full rounded-2xl py-4 text-center font-bold transition-all ${
-                    localPlayers.length >= 3 && !isGeneratingWordPair && areGameSettingsValid
+                    localPlayers.length >= 3 && !isGeneratingWordPair && areLocalSettingsValid
                       ? 'cursor-pointer bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-900/40 hover:from-violet-500 hover:to-indigo-500'
                       : 'cursor-not-allowed bg-white/5 text-slate-500'
                   }`}
                 >
-                  {isGeneratingWordPair && selectedWordSource === 'ai'
+                  {isGeneratingWordPair && selectedWordSource === 'ai' && selectedLocalGameMode === 'word-hunt'
                     ? 'Gemini is making a fresh pair...'
-                    : 'Start Local Game'}
+                    : `Start ${selectedLocalGameModeDetails.name}`}
                 </button>
-                {!areGameSettingsValid && (
+                {!areLocalSettingsValid && (
                   <p className="mt-3 text-center text-xs text-amber-300">
                     Finish the custom category and topic in Game Settings.
                   </p>
