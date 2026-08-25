@@ -1,10 +1,12 @@
 import GameScreen from '../components/GameScreen'
+import SpeakingOrder from '../components/SpeakingOrder'
 
 export default function DiscussionScreen({
   timerMode,
   timer,
   isLocalMode,
   lobbyMode,
+  playerRoles,
   onManualEnd,
 }) {
   return (
@@ -16,6 +18,21 @@ export default function DiscussionScreen({
       <p className="mt-2 mb-8 text-sm leading-relaxed text-slate-400">
         Ask questions, compare clues, and work out who received the different word.
       </p>
+
+      <div className="mb-6">
+        {isLocalMode ? (
+          <div className="rounded-2xl border border-violet-400/20 bg-violet-500/5 p-4">
+            <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-violet-300">
+              First Player
+            </span>
+            <p className="mt-2 text-lg font-black text-violet-100">
+              {playerRoles[0]?.name || 'Player 1'} goes first
+            </p>
+          </div>
+        ) : (
+          <SpeakingOrder players={playerRoles} compact />
+        )}
+      </div>
 
       {timerMode === 'timed' ? (
         <>

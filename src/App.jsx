@@ -35,7 +35,11 @@ import TimeTrialScreen from './screens/TimeTrialScreen'
 import VotingScreen from './screens/VotingScreen'
 import { generateAiWordPair } from './services/wordGeneration'
 import { supabase } from './supabaseClient'
-import { assignPlayerRoles, extractPlayerNames } from './utils/gameLogic'
+import {
+  assignPlayerRoles,
+  extractPlayerNames,
+  rotatePlayersFromRandomStart,
+} from './utils/gameLogic'
 import {
   formatTimeTicks,
   generateTimeTargetTicks,
@@ -286,10 +290,12 @@ export default function App() {
   const handleStartLocalGame = async () => {
     if (localPlayers.length < 3 || isGeneratingWordPair) return
 
+    const orderedLocalPlayers = rotatePlayersFromRandomStart(localPlayers)
+
     if (selectedLocalGameMode === 'time-target') {
       const targetTicks = generateTimeTargetTicks()
       const roles = assignPlayerRoles(
-        localPlayers,
+        orderedLocalPlayers,
         {
           regular: formatTimeTicks(targetTicks),
           undercover: getTimeTargetHint(targetTicks),
@@ -317,7 +323,7 @@ export default function App() {
 
     try {
       const wordPair = await getRoundWordPair()
-      const roles = assignPlayerRoles(localPlayers, wordPair, {
+      const roles = assignPlayerRoles(orderedLocalPlayers, wordPair, {
         showHint: selectedHintMode === 'hint',
         category: selectedCategoryDisplayMode === 'show'
           ? wordPair.categoryName
@@ -1015,6 +1021,7 @@ export default function App() {
         timer={timer}
         isLocalMode={isLocalMode}
         lobbyMode={lobbyMode}
+        playerRoles={playerRoles}
         onManualEnd={handleManualDiscussionEnd}
       />
     )

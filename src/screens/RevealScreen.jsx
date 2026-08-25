@@ -1,4 +1,5 @@
 import GameScreen from '../components/GameScreen'
+import SpeakingOrder from '../components/SpeakingOrder'
 
 export default function RevealScreen({
   isLocalMode,
@@ -150,26 +151,10 @@ export default function RevealScreen({
         )}
       </div>
 
-      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-left">
-        <h3 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-          Turn Order
-        </h3>
-        <ul className="space-y-2">
-          {playerRoles.map((player, index) => (
-            <li key={`${player.name}-${index}`} className="flex items-center gap-3 rounded-xl px-2 py-1.5 text-sm">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-violet-500/15 text-xs font-bold text-violet-300">
-                {index + 1}
-              </span>
-              <span className={player.name === currentPlayer?.name
-                ? 'font-bold text-violet-200'
-                : 'text-slate-300'}
-              >
-                {player.name} {player.name === currentPlayer?.name && '(You)'}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <SpeakingOrder
+        players={playerRoles}
+        currentPlayerName={currentPlayer?.name}
+      />
 
       {lobbyMode === 'HOST' ? (
         <button

@@ -12,6 +12,19 @@ export function extractPlayerNames(playersField) {
     .filter(Boolean)
 }
 
+export function rotatePlayersFromRandomStart(playerNames) {
+  if (!Array.isArray(playerNames) || playerNames.length < 2) {
+    return Array.isArray(playerNames) ? [...playerNames] : []
+  }
+
+  const firstPlayerIndex = Math.floor(Math.random() * playerNames.length)
+
+  return [
+    ...playerNames.slice(firstPlayerIndex),
+    ...playerNames.slice(0, firstPlayerIndex),
+  ]
+}
+
 export function assignPlayerRoles(
   playerNames,
   wordPair,
